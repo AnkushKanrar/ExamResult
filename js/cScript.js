@@ -46,7 +46,8 @@ function readExcelData(inputName,inputRollNum) {
 	var resultMarks ='NA'
 	var resultName ='NA'
 	var resultRoll ='NA'
-    const token = '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'; // Replace with your actual token
+    //const token = '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'; // Replace with your actual token
+	const token ='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';
     const owner = 'AnkushKanrar'; // Replace with the repository owner's username
     const repo = 'DataProcess'; // Replace with your repository name
     const path = 'ResultData2.csv'; // Replace with the path to your CSV file in the repository
