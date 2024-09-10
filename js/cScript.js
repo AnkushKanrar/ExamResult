@@ -1,3 +1,10 @@
+ const encodedString ='W3siTmFtZSI6IlJhbSBLcmlzaG5hIiwiUm9sbE51bWJlciI6IkExMS0xMiIsIk1hcmtzIjoxODAsIlJlbWFya3MiOiJOQSJ9LHsiTmFtZSI6IlNoeWFtIFNoZWUiLCJSb2xsTnVtYmVyIjoiQjExLTIzIiwiTWFya3MiOjE4MSwiUmVtYXJrcyI6Ik5BIn0seyJOYW1lIjoiTGFrc2htYW4gRGFzIiwiUm9sbE51bWJlciI6IkIxMS0yNCIsIk1hcmtzIjoxODIsIlJlbWFya3MiOiJOQSJ9LHsiTmFtZSI6IkJoYXJhdCBEYXMiLCJSb2xsTnVtYmVyIjoiQjExLTI1IiwiTWFya3MiOjE4MywiUmVtYXJrcyI6Ik5BIn0seyJOYW1lIjoiS2FybmEgRGFzIiwiUm9sbE51bWJlciI6IkIxMS0yNiIsIk1hcmtzIjoxODQsIlJlbWFya3MiOiJOQSJ9LHsiTmFtZSI6IktyaXNobmEgRGFzIiwiUm9sbE51bWJlciI6IkIxMS0yNyIsIk1hcmtzIjoxODUsIlJlbWFya3MiOiJOQSJ9XQ=='
+
+// Decode a Base64 string
+//const decodedString = atob(encodedString);
+//console.log(decodedString); 
+ 
+ 
  function showResult() {
 			
 			var error = document.getElementById('error');
@@ -25,7 +32,11 @@
 			if ( boolMobNum ) {
             //document.getElementById('resultDisplay').innerText = inputValueName + ' Marks is : ' + inputValue;
 				// Excel Data Read and show 
-			var retMarks = readExcelData ( nameInput , rollNumInput)
+			//var retMarks = readExcelData ( nameInput , rollNumInput)
+			strToJson (encodedString,nameInput , rollNumInput)
+			
+			
+			
 			//document.getElementById('resultDisplay').innerText = 'Dear '+ nameInput + ', you have scored 120 out of 200 marks.' ;
 			//document.getElementById('resultDisplay').style.backgroundColor = 'green';
 			} else {
@@ -33,12 +44,7 @@
 				document.getElementById('resultDisplay').style.backgroundColor = 'red';
 			}
 			
-		
-			//alert ('return Marks is --->'+retMarks)
-		
-            
-			
- }
+ };
 
 		
 function readExcelData(inputName,inputRollNum) {
@@ -46,8 +52,7 @@ function readExcelData(inputName,inputRollNum) {
 	var resultMarks ='NA'
 	var resultName ='NA'
 	var resultRoll ='NA'
-    //const token = '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'; // Replace with your actual token
-	const token ='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';
+    const token = 'ghp_9YaCXXXXXXXXXXX'; // Replace with your actual token
     const owner = 'AnkushKanrar'; // Replace with the repository owner's username
     const repo = 'DataProcess'; // Replace with your repository name
     const path = 'ResultData2.csv'; // Replace with the path to your CSV file in the repository
@@ -115,6 +120,66 @@ function readExcelData(inputName,inputRollNum) {
 	
 };	
 
+
+function strToJson(encodedString,inputName,inputRollNum){
+	// Decode a Base64 string
+	const strInput = atob(encodedString);
+	//console.log(strInput);
+
+	var resultMarks ='NA'
+	var resultName ='NA'
+	var resultRoll ='NA'
+	// Parse JSON string to array of objects
+	const jsonArray = JSON.parse(strInput);
+
+	// Output the array of objects
+	//console.log(jsonArray);
+		
+	//console.log ('Name-------------->'+inputName)
+	//console.log ('Roll Number------->'+inputRollNum)
+
+	resultName = inputName.toUpperCase().replace(/\s+/g, '');
+	console.log ('Name in Upper -------------->'+resultName);
+	resultRoll = inputRollNum.toUpperCase().replace(/\s+/g, '');
+	console.log ('Roll in Upper -------------->'+resultRoll);
+	const transformedArray = jsonArray.map(item => {
+		return {
+			Name: item.Name.toUpperCase().replace(/\s+/g, ''),
+			RollNumber: item.RollNumber.toUpperCase().replace(/\s+/g, ''),			
+			Marks: item.Marks,
+			Remarks: 'NA'
+		};
+	});
+
+			
+	console.log (transformedArray);
+	 
+	const student = transformedArray.find(item => item.Name === resultName);
+	 
+	 //let value;
+		if (student === null || typeof student === 'undefined') {
+			console.log('Value is null or undefined');
+			document.getElementById('resultDisplay').innerText = 'Please enter your name exactly as it appears on your admit card !'
+			document.getElementById('resultDisplay').style.backgroundColor = 'red';
+		}
+		else if (student.RollNumber == resultRoll)
+		{		 
+			 console.log(student);
+			 console.log(student.RollNumber); 
+			 resultMarks = student.Marks ;
+			 console.log(student.Marks );
+		
+			 document.getElementById('resultDisplay').textContent =  'Dear '+ inputName + ', you have scored '+resultMarks+' out of 200 marks.' ;
+			 document.getElementById('resultDisplay').style.backgroundColor = 'green';
+			 //document.getElementById('resultDisplay').textContent = jsonArray.stringify(json, null, 2);
+		}
+		else 
+		{
+			document.getElementById('resultDisplay').innerText = 'Please enter your roll number exactly as it appears on your admit card !'
+			document.getElementById('resultDisplay').style.backgroundColor = 'red';
+		}
+   
+};
 
 		
 		
